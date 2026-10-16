@@ -1,0 +1,69 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Quiz</title>
+</head>
+<body>
+    <h2>Online Quiz Application</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Submit</button>
+    <h3 id="result"></h3>
+    <h3 id="high"></h3>
+
+    <script>
+        let questions = [
+            {
+                q: "1. HTML stands for?",
+                options: ["Hyper Text Markup Language", "High Text", "Home Tool", "None"],
+                answer: 0
+            },
+            {
+                q: "2. Which language is used for web interactivity?",
+                options: ["C", "JavaScript", "Python", "Java"],
+                answer: 1
+            },
+            {
+                q: "3. Which tag creates a heading?",
+                options: ["<p>", "<h1>", "<br>", "<div>"],
+                answer: 1
+            }
+        ];
+
+        let quiz = document.getElementById("quiz");
+        let high = localStorage.getItem("highScore") || 0;
+
+        questions.forEach((item, i) => {
+            quiz.innerHTML += `<p>${item.q}</p>`;
+            item.options.forEach((opt, j) => {
+                quiz.innerHTML += `
+                    <input type="radio" name="q${i}" value="${j}">
+                    ${opt}<br>`;
+            });
+        });
+
+        function submitQuiz() {
+            let score = 0;
+
+            questions.forEach((item, i) => {
+                let selected =
+                    document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected && Number(selected.value) === item.answer)
+                    score++;
+            });
+
+            if (score > high) {
+                high = score;
+                localStorage.setItem("highScore", high);
+            }
+
+            document.getElementById("result").innerText =
+                "Your Score: " + score + "/" + questions.length;
+
+            document.getElementById("high").innerText =
+                "Highest Score: " + high;
+        }
+    </script>
+</body>
+</html>
+```
